@@ -1,0 +1,46 @@
+ .set-w() {
+     width: 300px;
+     height: 300px;
+ }
+
+ .dark-btn(@w, @h) {
+     font-size: 14px;
+     outline: none;
+     display: inline-block;
+     width: @w;
+     height: @h;
+     border-radius: @h/2;
+     background-color: #1e7dd7;
+     text-align: center;
+     text-decoration: none;
+     line-height: @h;
+     color: white;
+     &:hover {
+         background-color: #1282ec !important;
+     }
+ }
+
+ .light-btn(@w, @h) {
+     font-size: 14px;
+     outline: none;
+     display: inline-block;
+     width: @w;
+     height: @h;
+     border-radius: @h/2;
+     background-color: white;
+     text-align: center;
+     text-decoration: none;
+     line-height: @h;
+     color: #1e7dd7;
+     border: 1px #1e7dd7 solid;
+     box-sizing: border-box;
+     &:hover {
+         color: white;
+         background-color: #1282ec !important;
+     }
+ }
+
+ .set-bg-c-i(@img, @color: transparent) {
+     background: @color url("@{img}") no-repeat top center;
+     background-size: 100% 100%;
+ }

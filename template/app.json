@@ -1,0 +1,7 @@
+{
+    "app_name": "PC.node-bug-pc",
+    "custom": {
+        "port": 8092,
+        "cdnSwitch": false
+    }
+}
