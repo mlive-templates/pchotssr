@@ -6,7 +6,7 @@
 const express = require('express')
 const router = express.Router()
 const routerConfig = require('./config')
-const render = require('../template')
+// const render = require('../template')
 const common = require('../common/common')
 
 // 根据config 配置路由
@@ -45,13 +45,14 @@ router.use((err, req, res, next) => {
     }
     res.format({
         'text/html': function () {
-            res.status(500).send(render.renderError())
+            res.redirect('/404')
+            // res.status(500).send(render.renderError())
         },
         'application/json': function () {
             return res.status(500).json(common.answer(false, err))
         },
         'default': function () {
-            res.status(500).send(render.renderError())
+            res.redirect('/404')
         }
     })
 })
@@ -62,13 +63,13 @@ router.use('*', (req, res) => {
     }
     res.format({
         'text/html': function () {
-            res.status(404).send(render.renderError())
+            res.redirect('/404')
         },
         'application/json': function () {
             return res.status(404).json(payload)
         },
         'default': function () {
-            res.status(404).send(render.renderError())
+            res.redirect('/404')
         }
     })
 })

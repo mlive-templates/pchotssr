@@ -16,6 +16,9 @@ const config = {
         path: '/admin',
         con: View.default('admin')
     }, {
+        path: '/404',
+        con: View.default('404')
+    }, {
         path: '/api',
         children: [{
             path: 'login/login',
