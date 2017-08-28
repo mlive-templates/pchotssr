@@ -2,7 +2,7 @@
  * create time: Login 类
  * fn: 处理Login 相关的 逻辑
  */
-const Common = require('../../common/common')
+import * as Common from '../../common/common'
 class Login {
     /**
      * 用户登录
@@ -42,4 +42,4 @@ class Login {
     }
 }
 
-module.exports = Login
+export default Login

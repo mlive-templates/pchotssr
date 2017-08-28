@@ -1,6 +1,9 @@
-const config = require('./config')
-const path = require('path')
-const fs = require('fs-extra')
+// const config = require('./config')
+// const path = require('path')
+// const fs = require('fs-extra')
+import config from './config'
+import path from 'path'
+import fs from 'fs-extra'
 
 let cacheAssetsJson = ''
 
@@ -69,7 +72,7 @@ function renderError() {
     return render('404')
 }
 
-module.exports = {
+export default {
     render,
     renderError
 }

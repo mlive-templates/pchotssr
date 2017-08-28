@@ -2,9 +2,9 @@
  * create time: 2017-07-16
  * fn: 路由配置
  */
-const View = require('../controller/view')
-const apiLogin = require('../controller/api/login')
-const interceptors = require('./interceptors')
+import View from '../controller/view'
+import apiLogin from '../controller/api/login'
+import interceptors from './interceptors'
 
 const config = {
     globalInterceptors: [interceptors.loginInterceptor],
@@ -14,10 +14,10 @@ const config = {
         con: View.loginView
     }, {
         path: '/admin',
-        con: View.default('admin')
+        con: View.view('admin')
     }, {
         path: '/404',
-        con: View.default('404')
+        con: View.view('404')
     }, {
         path: '/api',
         children: [{
@@ -32,4 +32,4 @@ const config = {
     }]
 }
 
-module.exports = config
+export default config

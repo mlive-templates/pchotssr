@@ -1,8 +1,8 @@
-const _app = require('../index')
+import _app from '../index'
 const app = _app.app
 const router = _app.router
-const http = require('http')
-const config = require('../config')
+import http from 'http'
+import config from '../config'
 const server = http.createServer(app)
 
 const port = normalizePort(config.port || '3000')
@@ -16,7 +16,6 @@ function listen() {
     server.on('listening', onListening)
     server.listen(port)
 }
-
 
 function normalizePort(val) {
     var port = parseInt(val, 10)

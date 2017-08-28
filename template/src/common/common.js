@@ -1,4 +1,4 @@
-exports.answer = function (success, msg, data) {
+export function answer(success, msg, data) {
     return {
         success: success,
         msg: msg.toString(),
@@ -8,12 +8,12 @@ exports.answer = function (success, msg, data) {
 /**
  * 返回当前时间，10位，忽略毫秒
  */
-exports.getCurTime = function () {
+export function getCurTime() {
     const date = new Date()
     return (date.valueOf() + '').slice(0, 10) - 0
 }
 
-exports.formateDate = function (time, style, diff) {
+export function formateDate(time, style, diff) {
     // 如果传入的是时间戳，必须是number类型，否则报错
     const d = diff || 0
     const date = new Date(new Date(time).getTime() + d * (1000 * 60 * 60 * 24))
@@ -61,7 +61,7 @@ exports.formateDate = function (time, style, diff) {
     return db
 }
 
-exports.routerWrap = function (genFn) {
+export function routerWrap(genFn) {
     return async function (req, res, next) {
         try {
             await genFn(req, res, next)
@@ -108,7 +108,7 @@ const transporter = nodemailer.createTransport(smtpTransport({
  * @param {String} subject 发送的主题
  * @param {String} html 发送的html内容
  */
-exports.sendMail = function (recipient, subject, type, data) {
+export function sendMail(recipient, subject, type, data) {
     let tpl = ``
     if (type === 1) {
         tpl = `<!DOCTYPE html>

@@ -1,8 +1,6 @@
-require('babel-core/register')
-// const path = require('path')
-// const express = require('express')
+// require('babel-core/register')
 const opn = require('opn')
-const _app = require('../src/index')
+import _app from '../src/index'
 const app = _app.app
 const router = _app.router
 

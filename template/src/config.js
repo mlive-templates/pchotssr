@@ -93,4 +93,5 @@ function get(key, config) {
     return value
 }
 
-module.exports = init()
+export default init()
+// module.exports = init()

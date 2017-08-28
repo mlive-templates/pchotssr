@@ -1,6 +1,7 @@
-// const template = require('../../template')
-const render = require('../../render')
-exports.default = function (viewName) {
+// const render = require('../../render')
+import render from '../../render'
+
+function view(viewName) {
     return async(req, res, next) => {
         // context 携带数据渲染模板
         const html = await render.render(viewName, {
@@ -14,8 +15,13 @@ exports.default = function (viewName) {
     }
 }
 
-exports.loginView = async function (req, res, next) {
+async function loginView(req, res, next) {
     const html = await render.render('index')
     res.send(html)
     res.end()
+}
+
+export default {
+    view,
+    loginView
 }

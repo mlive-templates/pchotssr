@@ -1,9 +1,9 @@
-const vueServerRender = require('vue-server-renderer')
-const LRU = require('lru-cache')
-const path = require('path')
-// const fs = require('fs-extra')
-const templateFactory = require('./template')
+import * as vueServerRender from 'vue-server-renderer'
+import LRU from 'lru-cache'
+import path from 'path'
+import templateFactory from './template'
 const cacheBundle = {}
+
 // const cacheJson = {}
 // const bundleJsonPath = path.join(__dirname, '../build/bundles')
 // const bundleFiles = fs.readdirSync(bundleJsonPath)
@@ -68,6 +68,6 @@ function render(name, data) {
     })
 }
 
-module.exports = {
+export default {
     render
 }

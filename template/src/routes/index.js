@@ -3,11 +3,10 @@
  * fn: 路由入口文件，所有路由在这里加载
  */
 
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const routerConfig = require('./config')
-// const render = require('../template')
-const common = require('../common/common')
+import routerConfig from './config'
+import * as common from '../common/common'
 
 // 根据config 配置路由
 function parseRouter(router) {
@@ -74,4 +73,4 @@ router.use('*', (req, res) => {
     })
 })
 
-module.exports = router
+export default router
