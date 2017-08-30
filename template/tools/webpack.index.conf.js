@@ -1,6 +1,7 @@
 /**
  * webpack index 启动服务 配置
  */
+var fs = require('fs-extra')
 var path = require('path')
 var rootPath = path.join(__dirname, '../')
 var nodeExternals = require('webpack-node-externals')
@@ -41,4 +42,11 @@ var config = {
     }
 }
 
-module.exports = config
+function getConfig() {
+    if (fs.existsSync(entryPath)) {
+        return config
+    } else {
+        return false
+    }
+}
+module.exports = getConfig()

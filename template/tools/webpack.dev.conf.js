@@ -12,22 +12,26 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
     baseWebpackConfig.entry[name] = ['webpack-hot-middleware/client?noInfo=true&reload=true'].concat(baseWebpackConfig.entry[name])
 })
 
-module.exports = merge(baseWebpackConfig, {
-    module: {
-        rules: utils.styleLoaders({
-            sourceMap: config.dev.cssSourceMap
-        })
-    },
-    // cheap-module-eval-source-map is faster for development
-    devtool: '#cheap-module-eval-source-map',
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': config.dev.env
-        }),
-        // 热加载
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin(),
+function getConfig() {
+    return !utils.isEmpty(baseWebpackConfig.entry) && merge(baseWebpackConfig, {
+        module: {
+            rules: utils.styleLoaders({
+                sourceMap: config.dev.cssSourceMap
+            })
+        },
+        // cheap-module-eval-source-map is faster for development
+        devtool: '#cheap-module-eval-source-map',
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.env': config.dev.env
+            }),
+            // 热加载
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.NoEmitOnErrorsPlugin(),
 
-        new FriendlyErrorsPlugin()
-    ]
-})
+            new FriendlyErrorsPlugin()
+        ]
+    })
+}
+
+module.exports = getConfig()

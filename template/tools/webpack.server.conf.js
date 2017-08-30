@@ -21,11 +21,6 @@ const vueLoaderConfig = {
         extract: false
     })
 }
-// var cssLoader = utils.styleLoaders({
-//     sourceMap: config.build.productionSourceMap,
-//     extract: true
-// })
-// console.log(cssLoader)
 
 function getConfig(entry) {
     return {
@@ -92,4 +87,9 @@ function getConfig(entry) {
     }
 }
 
-module.exports = entry.map(name => getConfig(name))
+module.exports = (function () {
+    if (utils.isEmpty(entry)) {
+        return false
+    }
+    return entry.map(name => getConfig(name))
+})()

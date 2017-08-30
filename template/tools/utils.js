@@ -68,3 +68,8 @@ exports.styleLoaders = function (options) {
     }
     return output
 }
+
+exports.isEmpty = function (obj) {
+    if (obj == null) return true
+    return Object.keys(obj).length === 0
+}
