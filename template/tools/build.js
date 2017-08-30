@@ -18,12 +18,9 @@ rm(path.join(config.build.assetsRoot), err => {
         console.log('copy package.json complete!')
 
         var configList = []
-        var webpackConfig = require('./webpack.prod.conf')
-        var webpackServerConfig = require('./webpack.server.conf')
-        var webpackIndexConfig = require('./webpack.index.conf')
-        setConfig(webpackConfig)
-        setConfig(webpackServerConfig)
-        setConfig(webpackIndexConfig)
+        setConfig(require('./webpack.prod.conf'))
+        setConfig(require('./webpack.server.conf'))
+        setConfig(require('./webpack.index.conf'))
 
         function setConfig(cfg) {
             if (cfg) {
