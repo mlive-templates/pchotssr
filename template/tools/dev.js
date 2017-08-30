@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const webpackIndexConfig = require('./webpack.index.conf')
 const webpackServerConfig = require('./webpack.server.conf')
 
+var packageInfo = require('./lib/packageInfo.js')
 const dateUtil = require('./lib/dateUtil')
 
 const path = require('path')
@@ -14,12 +15,22 @@ const cp = require('child_process')
 
 let n
 
+packageInfo.copy().then(() => {
+    compilerServer().then(() => {
+        formatLog('服务端编译完成', 'green')
+        comilerIndex()
+    }, err => {
+        console.log(chalk.red('服务端编译出错!'))
+        console.log(err)
+    })
+}).catch((err) => {
+    console.log(err)
+    process.exit(0)
+})
+
 function formatLog(str, color) {
     console.log(chalk[color](`${dateUtil.formatDate('yyyy-MM-dd HH:mm:ss')}: ${str}!`))
 }
-
-compilerServer()
-comilerIndex()
 
 function compilerServer() {
     spinner.start()
@@ -37,9 +48,7 @@ function compilerServer() {
             })
         })
     })
-    Promise.all(tasks).then(() => {
-        formatLog('服务端编译完成', 'green')
-    })
+    return Promise.all(tasks)
 }
 
 function comilerIndex() {

@@ -1,6 +1,3 @@
-// const config = require('./config')
-// const path = require('path')
-// const fs = require('fs-extra')
 import config from './config'
 import path from 'path'
 import fs from 'fs-extra'
@@ -15,7 +12,7 @@ function getAssetsJson(env) {
     if (cacheAssetsJson) {
         return cacheAssetsJson
     }
-    const _p = env ? '../client-assets.json' : '../build/bundles/client-assets.json'
+    const _p = '../build/bundles/client-assets.json'
     cacheAssetsJson = fs.readJsonSync(path.join(__dirname, _p))
     return cacheAssetsJson
 }

@@ -39,7 +39,7 @@ outPutEntryAssetsPlugin.prototype.apply = function apply(compiler) {
         var json = JSON.stringify(manifest, null, 4)
 
         if (process.env.NODE_ENV == 'development') {
-            var dest = require('path').join(__dirname, '../../', self.options.filename)
+            var dest = require('path').join(__dirname, '../../build/bundles', self.options.filename)
             writeJsontoDisk(dest, manifest)
         }
         compilation.assets[self.options.filename] = {
