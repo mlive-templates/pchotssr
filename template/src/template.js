@@ -1,26 +1,31 @@
 import config from './config'
 import path from 'path'
 import fs from 'fs-extra'
-const cacheAssetsJson = fs.readJsonSync(path.join(__dirname, './bundles/client-assets.json'))
 
-const isDevelopmen = process.env.NODE_ENV === 'development'
+let assetsJson = ''
+try {
+    assetsJson = fs.readJsonSync(path.join(__dirname, './bundles/client-assets.json'))
+} catch (error) {
+    console.info('没有client-assets.json文件')
+}
+// const isDevelopmen = process.env.NODE_ENV === 'development'
 
 function render(name) {
-    const staticServer = config.staticServer
+    // const staticServer = config.staticServer
     const cdn = config.cdn
     const env = config.name
     const startup = config.startup
-    const assetsJson = cacheAssetsJson
-    let publicPath = '/' + cdn
-    if (!isDevelopmen) {
-        publicPath = staticServer + publicPath
+    const publicPath = assetsJson ? assetsJson.publicPath : '/' + cdn
+    let css = ''
+    let scripts = ''
+    if (assetsJson && assetsJson[name]) {
+        css = assetsJson[name].css.map(function (item) {
+            return `<link rel="stylesheet" href="${publicPath}/${item}" />`
+        }).join('')
+        scripts = assetsJson[name].js.map(function (item) {
+            return `<script type="text/javascript" src="${publicPath}/${item}"></script>`
+        }).join('')
     }
-    const css = assetsJson[name].css.map(function (item) {
-        return `<link rel="stylesheet" href="${publicPath}/${item}" />`
-    }).join('')
-    const scripts = assetsJson[name].js.map(function (item) {
-        return `<script type="text/javascript" src="${publicPath}/${item}"></script>`
-    }).join('')
     const html = `
     <!doctype html>
     <html>

@@ -7,6 +7,8 @@ const VueSSRPlugin = require('vue-ssr-webpack-plugin')
 const utils = require('./utils')
 const entry = require('./lib/entryInfo').getServerEntry()
 const config = require('./config')
+const packageInfo = require('./lib/packageInfo.js')
+const cdn = packageInfo.getInfo().cdn
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
@@ -28,7 +30,8 @@ function getConfig(entry) {
         target: 'node',
         output: {
             libraryTarget: 'commonjs2', // !different
-            path: path.join(rootPath, 'build/bundles')
+            path: path.join(rootPath, 'build/bundles'),
+            publicPath: !isProduction ? '/' + cdn + '/' : '//static1.mtime.cn/' + cdn + '/'
         },
         resolve: {
             alias: {

@@ -1,5 +1,7 @@
 <template>
-    <div id="app" class="error"></div>
+    <div id="app" class="error">
+        <img src="../../assets/image/404.jpg" alt="">
+    </div>
 </template>
 
 <style lang="less" scoped>

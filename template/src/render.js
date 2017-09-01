@@ -6,7 +6,14 @@ import templateFactory from './template'
 const cacheBundle = {}
 
 const bundleJsonPath = path.join(__dirname, './bundles')
-const bundleFiles = fs.readdirSync(bundleJsonPath)
+let bundleFiles
+try {
+    bundleFiles = fs.readdirSync(bundleJsonPath)
+} catch (error) {
+    console.log('没有bundleJson文件')
+    bundleFiles = []
+}
+
 bundleFiles.forEach((val, index) => {
     if (val.indexOf('.json') > -1) {
         const matchs = val.match(/(\w+)-vue-ssr-bundle\.json/)
