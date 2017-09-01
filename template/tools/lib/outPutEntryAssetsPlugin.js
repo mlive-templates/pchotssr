@@ -24,23 +24,15 @@ outPutEntryAssetsPlugin.prototype.apply = function apply(compiler) {
         var manifest = {
             publicPath: stats.publicPath
         }
-        // console.log('chunks=>', stats.chunks)
-        // stats.entrypoints['admin'].chunks.forEach((item) => {
-        //     console.log(stats.chunks[item])
-        // })
-
         Object.keys(stats.entrypoints).forEach(function (item) {
-            // console.log(item + '=>', stats.entrypoints[item].chunks)
             manifest[item] = {
                 js: stats.entrypoints[item].assets.filter(isJS),
                 css: stats.entrypoints[item].assets.filter(isCss)
             }
         })
         var json = JSON.stringify(manifest, null, 4)
-
-        if (process.env.NODE_ENV == 'development') {
-            var dest = require('path').join(__dirname, '../../build/bundles', self.options.filename)
-            writeJsontoDisk(dest, manifest)
+        if (process.env.NODE_ENV === 'development') {
+            writeJsontoDisk(self.options.filename, manifest)
         }
         compilation.assets[self.options.filename] = {
             source: function () {
@@ -57,8 +49,15 @@ outPutEntryAssetsPlugin.prototype.apply = function apply(compiler) {
 /**
  * 开发环境做一些事
  */
-function writeJsontoDisk(dest, json) {
-    require('fs-extra').writeJsonSync(dest, json)
+function writeJsontoDisk(name, json) {
+    const fs = require('fs-extra')
+    const path = require('path')
+    const dir = path.join(__dirname, '../../build/bundles')
+    const dest = path.join(dir, path.basename(name))
+    if (!fs.existsSync(dir)) {
+        fs.mkdirsSync(dir)
+    }
+    fs.writeJsonSync(dest, json)
 }
 
 module.exports = outPutEntryAssetsPlugin

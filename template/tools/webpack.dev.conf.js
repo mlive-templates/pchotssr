@@ -13,7 +13,13 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 })
 
 function getConfig() {
+    var cdn = require('./lib/packageInfo.js').getInfo().cdn
     return !utils.isEmpty(baseWebpackConfig.entry) && merge(baseWebpackConfig, {
+        output: {
+            path: config.build.assetsRoot + '/client/' + cdn,
+            publicPath: '/' + cdn + '/',
+            filename: utils.assetsPath('script/[name].js')
+        },
         module: {
             rules: utils.styleLoaders({
                 sourceMap: config.dev.cssSourceMap

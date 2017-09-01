@@ -1,4 +1,3 @@
-// const render = require('../../render')
 import render from '../../render'
 
 function view(viewName) {

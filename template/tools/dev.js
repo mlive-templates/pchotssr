@@ -7,30 +7,29 @@ const webpackServerConfig = require('./webpack.server.conf')
 var packageInfo = require('./lib/packageInfo.js')
 const dateUtil = require('./lib/dateUtil')
 
-const path = require('path')
 const chalk = require('chalk')
 const ora = require('ora')
 const spinner = ora('正在编译环境...')
-const cp = require('child_process')
 
-let n
+const config = require('./config')
+const port = config.dev.port
+const uri = 'http://localhost:' + port
+const opn = require('opn')
+const autoOpenBrowser = !!config.dev.autoOpenBrowser
+
+let web = null
 
 packageInfo.copy().then(() => {
-    compilerServer().then(() => {
-        formatLog('服务端编译完成', 'green')
-        comilerIndex()
-    }, err => {
-        console.log(chalk.red('服务端编译出错!'))
+    Promise.all([compilerServer(), compilerClient()]).then((data) => {
+        const clientData = data && data.length > 1 && data[1]
+        return compilerIndex(clientData)
+    }).catch(err => {
         console.log(err)
     })
 }).catch((err) => {
     console.log(err)
     process.exit(0)
 })
-
-function formatLog(str, color) {
-    console.log(chalk[color](`${dateUtil.formatDate('yyyy-MM-dd HH:mm:ss')}: ${str}!`))
-}
 
 function compilerServer() {
     spinner.start()
@@ -51,28 +50,67 @@ function compilerServer() {
     return Promise.all(tasks)
 }
 
-function comilerIndex() {
-    const compiler = webpack(webpackIndexConfig)
-
-    compiler.watch({}, (err, stats) => {
-        spinner.stop()
-        if (err) {
-            formatLog('编译出现错误', 'red')
-        } else {
-            formatLog('编译成功', 'green')
-            n && n.kill('SIGINT')
-
-            n = cp.fork(path.join(__dirname, '../build/index.js'), {
-                cwd: path.join(__dirname, '../build')
-            })
-
-            n.on('exit', (code, signal) => {
-                formatLog(`服务收到信号 ${signal || code} 退出!`, 'cyan')
-            })
-            n.on('message', (url) => {
-                formatLog('服务重新启动成功', 'green')
-                console.log(chalk.underline(url))
-            })
-        }
+function compilerClient() {
+    return new Promise((resolve, reject) => {
+        const webpackConfig = require('./webpack.dev.conf')
+        const compiler = webpack(webpackConfig)
+        const devMiddleware = require('webpack-dev-middleware')(compiler, {
+            publicPath: webpackConfig.output.publicPath,
+            quiet: true
+        })
+        const hotMiddleware = require('webpack-hot-middleware')(compiler, {
+            log: () => {},
+            timeout: 2000,
+            heartbeat: 1000
+        })
+        const middlewareList = [devMiddleware, hotMiddleware]
+        devMiddleware.waitUntilValid(() => {
+            formatLog('客户端资源构建完毕', 'green')
+            resolve(middlewareList)
+            // compilerIndex(startApp, middlewareList)
+        })
     })
+}
+
+function compilerIndex(ops) {
+    return new Promise((resolve, reject) => {
+        const compiler = webpack(webpackIndexConfig)
+        compiler.watch({}, (err, stats) => {
+            spinner.stop()
+            if (err) {
+                formatLog('Index 编译出现错误', 'red')
+                reject(err)
+            } else {
+                startApp(ops)
+                formatLog('Index 编译成功', 'green')
+                resolve()
+            }
+        })
+    })
+}
+
+function startApp(middlewareList) {
+    if (!web) {
+        web = require('../build/index')(middlewareList, function () {
+            console.log(chalk.cyan('服务器开始运行: '))
+            console.log(uri)
+            if (autoOpenBrowser && process.env.NODE_ENV === 'development') {
+                opn(uri)
+            }
+        })
+    } else {
+        web.close(function () {
+            const mod = require.cache[require.resolve('../build/index')]
+            delete require.cache[require.resolve('../build/index')]
+            const ix = mod.parent.children.indexOf(mod)
+            if (ix >= 0) mod.parent.children.splice(ix, 1)
+            web = require('../build/index')(middlewareList, function () {
+                console.log(chalk.green('web服务重新启动'))
+            })
+        })
+    }
+}
+
+function formatLog(str, color) {
+    console.log(chalk[color](`${dateUtil.formatDate('yyyy-MM-dd HH:mm:ss')}: ${str}!`))
 }

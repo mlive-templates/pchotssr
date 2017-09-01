@@ -1,29 +1,20 @@
 import config from './config'
 import path from 'path'
 import fs from 'fs-extra'
-
-let cacheAssetsJson = ''
+const cacheAssetsJson = fs.readJsonSync(path.join(__dirname, './bundles/client-assets.json'))
 
 const isDevelopmen = process.env.NODE_ENV === 'development'
-/**
- * 开发环境和生产环境 路径不同
- */
-function getAssetsJson(env) {
-    if (cacheAssetsJson) {
-        return cacheAssetsJson
-    }
-    const _p = '../build/bundles/client-assets.json'
-    cacheAssetsJson = fs.readJsonSync(path.join(__dirname, _p))
-    return cacheAssetsJson
-}
 
 function render(name) {
     const staticServer = config.staticServer
     const cdn = config.cdn
     const env = config.name
     const startup = config.startup
-    const assetsJson = getAssetsJson(isDevelopmen)
-    const publicPath = isDevelopmen ? '' : staticServer + '/' + cdn
+    const assetsJson = cacheAssetsJson
+    let publicPath = '/' + cdn
+    if (!isDevelopmen) {
+        publicPath = staticServer + publicPath
+    }
     const css = assetsJson[name].css.map(function (item) {
         return `<link rel="stylesheet" href="${publicPath}/${item}" />`
     }).join('')

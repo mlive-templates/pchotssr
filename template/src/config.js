@@ -49,7 +49,7 @@ function init() {
     }
     // console.info('Config.init.success', config.name)
 
-    const dir = path.resolve(__dirname, '../build/package.json')
+    const dir = path.resolve(__dirname, './package.json')
     try {
         const pkgStr = fs.readFileSync(dir, 'utf8')
         const pkg = JSON.parse(pkgStr)
@@ -94,4 +94,3 @@ function get(key, config) {
 }
 
 export default init()
-// module.exports = init()

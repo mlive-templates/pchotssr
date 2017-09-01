@@ -4,8 +4,7 @@ import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import router from './routes'
 const app = express()
-
-app.use(express.static(path.join(__dirname, '../build/client')))
+app.use(express.static(path.join(__dirname, './client')))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({

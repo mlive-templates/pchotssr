@@ -2,7 +2,6 @@
  * create time: 2017-07-14
  * fn: 路由入口文件，所有路由在这里加载
  */
-
 import express from 'express'
 const router = express.Router()
 import routerConfig from './config'

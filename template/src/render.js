@@ -5,7 +5,7 @@ import path from 'path'
 import templateFactory from './template'
 const cacheBundle = {}
 
-const bundleJsonPath = path.join(__dirname, '../build/bundles')
+const bundleJsonPath = path.join(__dirname, './bundles')
 const bundleFiles = fs.readdirSync(bundleJsonPath)
 bundleFiles.forEach((val, index) => {
     if (val.indexOf('.json') > -1) {
@@ -14,7 +14,7 @@ bundleFiles.forEach((val, index) => {
             return
         }
         const key = matchs[1]
-        const json = path.resolve(__dirname, `../build/bundles/${key}-vue-ssr-bundle.json`)
+        const json = path.resolve(bundleJsonPath, `./${key}-vue-ssr-bundle.json`)
         const bundleRender = vueServerRender.createBundleRenderer(
             json, {
                 inject: false,
@@ -41,8 +41,7 @@ function render(name, data) {
     if (process.env.NODE_ENV !== 'development' && cacheBundle[name]) {
         bundleRender = cacheBundle[name]
     } else {
-        // const json = cacheJson[name]
-        const json = path.resolve(__dirname, `../build/bundles/${name}-vue-ssr-bundle.json`)
+        const json = path.resolve(bundleJsonPath, `./${name}-vue-ssr-bundle.json`)
         bundleRender = vueServerRender.createBundleRenderer(
             json, {
                 inject: false,

@@ -17,7 +17,8 @@ var config = {
     context: path.resolve(__dirname, '../build'),
     output: {
         path: path.join(rootPath, 'build'),
-        filename: 'index.js'
+        filename: 'index.js',
+        libraryTarget: isProduction ? 'var' : 'commonjs2'
     },
     resolve: {
         extensions: ['.js']
@@ -31,7 +32,7 @@ var config = {
         process: true,
         Buffer: true,
         __filename: false,
-        __dirname: true,
+        __dirname: false,
         setImmediate: true
     },
     module: {

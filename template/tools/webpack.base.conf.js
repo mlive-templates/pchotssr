@@ -79,7 +79,7 @@ module.exports = {
             }
         }),
         new OutPutEntryAssetsPlugin({
-            filename: isProduction ? '../../../bundles/client-assets.json' : 'client-assets.json'
+            filename: '../../../bundles/client-assets.json'
         })
     ]
 }
