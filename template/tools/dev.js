@@ -16,7 +16,8 @@ const port = config.dev.port
 const uri = 'http://localhost:' + port
 const opn = require('opn')
 const autoOpenBrowser = !!config.dev.autoOpenBrowser
-
+// 要缓存的中间件列表
+const middlewareList = []
 let web = null
 
 packageInfo.copy().then(() => {
@@ -63,7 +64,7 @@ function compilerClient() {
             timeout: 2000,
             heartbeat: 1000
         })
-        const middlewareList = [devMiddleware, hotMiddleware]
+        middlewareList.concat([devMiddleware, hotMiddleware])
         devMiddleware.waitUntilValid(() => {
             formatLog('客户端资源构建完毕', 'green')
             resolve(middlewareList)
