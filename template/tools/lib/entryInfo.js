@@ -39,7 +39,23 @@ function getServerEntry(_p = './src/views/entry/server') {
     return entry
 }
 
+function getStaticEntry(_p = './src/views/page/statics') {
+    const readPath = path.resolve(rootPath, _p)
+    if (!fs.existsSync(readPath)) {
+        console.log('静态入口目录不存在')
+        return []
+    }
+    const files = fs.readdirSync(readPath)
+    const entry = []
+    files.map((val, index) => {
+        if (val.indexOf('.html') > -1) {
+            entry.push(readPath + '/' + val)
+        }
+    })
+    return entry
+}
 module.exports = {
     getClientEntry,
-    getServerEntry
+    getServerEntry,
+    getStaticEntry
 }

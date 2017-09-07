@@ -1,4 +1,5 @@
 import render from '../../render'
+import path from 'path'
 
 function view(viewName) {
     return async(req, res, next) => {
@@ -20,7 +21,22 @@ async function loginView(req, res, next) {
     res.end()
 }
 
+function simpleView(viewName) {
+    return async(req, res, next) => {
+        try {
+            res.sendFile(path.resolve(__dirname, './statics/' + viewName + '.html'), function (err) {
+                if (err) {
+                    next(err)
+                }
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+}
+
 export default {
     view,
+    simpleView,
     loginView
 }

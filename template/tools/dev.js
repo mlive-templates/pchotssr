@@ -24,7 +24,7 @@ let web = null
 rm(path.join(config.build.assetsRoot), err => {
     if (err) throw err
     packageInfo.copy().then(() => {
-        Promise.all([compilerServer(), compilerClient()]).then(() => {
+        Promise.all([compilerServer(), compilerClient(), compilerStatic()]).then(() => {
             return compilerIndex(middlewareList)
         }).catch(err => {
             console.log(err)
@@ -102,6 +102,27 @@ function compilerIndex(ops) {
             })
         } else {
             resolve()
+        }
+    })
+}
+
+function compilerStatic() {
+    return new Promise((resolve, reject) => {
+        const webpackStaticConfig = require('./webpack.statics.conf')
+        if (!webpackStaticConfig) {
+            formatLog('跳过静态资源编译', 'green')
+        } else {
+            const compiler = webpack(webpackStaticConfig)
+            compiler.watch({}, (err, stats) => {
+                spinner.stop()
+                if (err) {
+                    formatLog('静态资源编译出现错误', 'red')
+                    reject(err)
+                } else {
+                    formatLog('静态资源编译成功', 'green')
+                    resolve()
+                }
+            })
         }
     })
 }

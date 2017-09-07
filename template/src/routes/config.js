@@ -29,6 +29,9 @@ const config = {
             method: 'get',
             con: apiLogin.logout
         }]
+    }, {
+        path: '/test',
+        con: View.simpleView('test')
     }]
 }
 

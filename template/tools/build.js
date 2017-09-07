@@ -21,6 +21,7 @@ rm(path.join(config.build.assetsRoot), err => {
         setConfig(require('./webpack.prod.conf'))
         setConfig(require('./webpack.server.conf'))
         setConfig(require('./webpack.index.conf'))
+        setConfig(require('./webpack.statics.conf'))
 
         function setConfig(cfg) {
             if (cfg) {
